@@ -1,3 +1,4 @@
+import { CharacterController } from "./CharacterController";
 import {
   Cylinder,
   MeshReflectorMaterial,
@@ -48,9 +49,17 @@ export const Experience = () => {
       />
       <Torii scale={[10, 10, 10]} position={[8, 0, -20]} rotation-y={Math.PI} />
 
+      {/* Character */}
+      <CharacterController />
+
       {/* Stage */}
       <group position-y={-1}>
-        <RigidBody colliders={false} type="fixed" position-y={[-0.5]}>
+        <RigidBody
+          colliders={false}
+          type="fixed"
+          position-y={[-0.5]}
+          friction={2}
+        >
           <CylinderCollider args={[1 / 2, 5]} />
           <Cylinder scale={[5, 1, 5]} receiveShadow>
             <meshStandardMaterial color="white" />
