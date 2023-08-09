@@ -2,6 +2,7 @@ import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { KeyboardControls } from "@react-three/drei";
 import { useMemo } from "react";
+import { SocketManager } from "./components/SocketManager";
 
 export const Controls = {
   forward: "forward",
@@ -21,12 +22,15 @@ function App() {
   ]);
 
   return (
-    <KeyboardControls map={map}>
-      <Canvas shadows camera={{ position: [8, 8, 8], fov: 50 }}>
-        <color attach="background" args={["#ececec"]} />
-        <Experience />
-      </Canvas>
-    </KeyboardControls>
+    <>
+      <SocketManager />
+      <KeyboardControls map={map}>
+        <Canvas shadows camera={{ position: [8, 8, 8], fov: 50 }}>
+          <color attach="background" args={["#ececec"]} />
+          <Experience />
+        </Canvas>
+      </KeyboardControls>
+    </>
   );
 }
 
