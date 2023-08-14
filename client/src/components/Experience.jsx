@@ -1,15 +1,11 @@
 import { Adventurer } from "./Adventurer";
-import {
-  ContactShadows,
-  Environment,
-  OrbitControls,
-  useCursor,
-} from "@react-three/drei";
+import { Environment, OrbitControls, useCursor, Grid } from "@react-three/drei";
 import { charactersAtom } from "./SocketManager";
 import { socket } from "./SocketManager";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import * as THREE from "three";
+import { Torii } from "./Torii";
 
 export const Experience = () => {
   const [characters] = useAtom(charactersAtom);
@@ -19,9 +15,9 @@ export const Experience = () => {
   return (
     <>
       <Environment preset="sunset" />
-      <ambientLight intensity={0.3} />
-      <ContactShadows blur={2} />
+      <ambientLight intensity={0.5} />
       <OrbitControls />
+
       <mesh
         rotation-x={-Math.PI / 2}
         position-y={-0.001}
@@ -29,13 +25,20 @@ export const Experience = () => {
         onPointerEnter={() => setOnFloor(true)}
         onPointerLeave={() => setOnFloor(false)}
       >
-        <planeBufferGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#f0f0f0" />
+        <planeGeometry args={[100, 100]} />
+        <meshStandardMaterial color="lightgray" />
       </mesh>
+      <Grid
+        args={[100, 100]}
+        sectionColor={"lightgray"}
+        cellColor={"gray"}
+        position={[0, 0.01, 0]}
+      />
 
       {characters.map((character) => (
         <Adventurer
           key={character.id}
+          id={character.id}
           position={
             new THREE.Vector3(
               character.position[0],
@@ -48,6 +51,22 @@ export const Experience = () => {
           bottomColor={character.bottomColor}
         />
       ))}
+
+      <Torii
+        scale={[15, 15, 15]}
+        position={[0, 3.5, -22]}
+        rotation-y={1.25 * Math.PI}
+      />
+      <Torii
+        scale={[10, 10, 10]}
+        position={[-8, 2.5, -20]}
+        rotation-y={1.4 * Math.PI}
+      />
+      <Torii
+        scale={[10, 10, 10]}
+        position={[8, 2.5, -20]}
+        rotation-y={Math.PI}
+      />
     </>
   );
 };

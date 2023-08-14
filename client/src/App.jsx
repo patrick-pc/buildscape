@@ -1,7 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
+import { Physics } from "@react-three/rapier";
 import { KeyboardControls } from "@react-three/drei";
-import { useMemo } from "react";
+import { useMemo, Suspense } from "react";
 import { SocketManager } from "./components/SocketManager";
 
 export const Controls = {
@@ -24,12 +25,14 @@ function App() {
   return (
     <>
       <SocketManager />
-      <KeyboardControls map={map}>
-        <Canvas shadows camera={{ position: [8, 8, 8], fov: 50 }}>
-          <color attach="background" args={["#ececec"]} />
-          <Experience />
-        </Canvas>
-      </KeyboardControls>
+      <Canvas shadows camera={{ position: [8, 8, 8], fov: 50 }}>
+        <color attach="background" args={["#ececec"]} />
+        <Suspense>
+          <Physics>
+            <Experience />
+          </Physics>
+        </Suspense>
+      </Canvas>
     </>
   );
 }

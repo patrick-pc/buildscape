@@ -7,6 +7,8 @@ import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+import { userAtom } from "./SocketManager";
+import { useAtom } from "jotai";
 
 const MOVE_SPEED = 0.032;
 
@@ -14,18 +16,21 @@ export function Adventurer({
   hairColor = "black",
   topColor = "black",
   bottomColor = "black",
+  id,
   ...props
 }) {
   const position = useMemo(() => props.position, []);
 
-  const group = useRef();
+  const avatarRef = useRef();
   const { scene, materials, animations } = useGLTF("/models/Adventurer.glb");
+
   // Skinned meshes cannot be re-used in threejs without cloning them
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+
   // useGraph creates two flat object collections for nodes and materials
   const { nodes } = useGraph(clone);
 
-  const { actions } = useAnimations(animations, group);
+  const { actions } = useAnimations(animations, avatarRef);
   const [animation, setAnimation] = useState("CharacterArmature|Idle");
 
   useEffect(() => {
@@ -33,23 +38,32 @@ export function Adventurer({
     return () => actions[animation]?.fadeOut(0.32);
   }, [animation]);
 
-  useFrame(() => {
-    if (group.current.position.distanceTo(props.position) > 0.1) {
-      const direction = group.current.position
+  const [user] = useAtom(userAtom);
+
+  useFrame((state) => {
+    if (avatarRef.current.position.distanceTo(props.position) > 0.1) {
+      const direction = avatarRef.current.position
         .clone()
         .sub(props.position)
         .normalize()
         .multiplyScalar(MOVE_SPEED);
-      group.current.position.sub(direction);
-      group.current.lookAt(props.position);
+      avatarRef.current.position.sub(direction);
+      avatarRef.current.lookAt(props.position);
       setAnimation("CharacterArmature|Run");
     } else {
       setAnimation("CharacterArmature|Idle");
     }
+
+    if (id === user) {
+      state.camera.position.x = avatarRef.current.position.x + 8;
+      state.camera.position.y = avatarRef.current.position.y + 8;
+      state.camera.position.z = avatarRef.current.position.z + 8;
+      state.camera.lookAt(avatarRef.current.position);
+    }
   });
 
   return (
-    <group ref={group} {...props} position={position} dispose={null}>
+    <group ref={avatarRef} {...props} position={position} dispose={null}>
       <group name="Root_Scene">
         <group name="RootNode">
           <group

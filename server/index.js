@@ -29,6 +29,11 @@ io.on("connection", (socket) => {
     bottomColor: generateRandomHexColor(),
   });
 
+  socket.emit("join", {
+    characters,
+    id: socket.id,
+  });
+
   io.emit("characters", characters);
 
   socket.on("move", (position) => {
