@@ -39,25 +39,31 @@ function App() {
           </Canvas>
         </>
       ) : (
-        <div>
-          name:
-          <input
-            value={player.name}
-            onChange={(e) => setPlayer({ ...player, name: e.target.value })}
-          />
-          <br />
-          guild:
-          <input
-            value={player.guild}
-            onChange={(e) => setPlayer({ ...player, guild: e.target.value })}
-          />
-          <br />
-          class:
-          <input
-            value={player.class}
-            onChange={(e) => setPlayer({ ...player, class: e.target.value })}
-          />
-          <br />
+        <div className="flex flex-col items-center justify-center mt-80">
+          <div>
+            name:
+            <input
+              value={player.name}
+              onChange={(e) => setPlayer({ ...player, name: e.target.value })}
+            />
+          </div>
+
+          <div>
+            guild:
+            <input
+              value={player.guild}
+              onChange={(e) => setPlayer({ ...player, guild: e.target.value })}
+            />
+          </div>
+
+          <div>
+            class:
+            <input
+              value={player.class}
+              onChange={(e) => setPlayer({ ...player, class: e.target.value })}
+            />
+          </div>
+
           <button onClick={joinGame}>enter buildscape</button>
         </div>
       )}
