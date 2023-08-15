@@ -4,11 +4,11 @@ Command: npx gltfjsx@6.2.10 public/models/Adventurer.glb -o src/components/Adven
 */
 
 import React, { useRef, useState, useEffect, useMemo } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
-import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
-import { userAtom } from "./SocketManager";
 import { useAtom } from "jotai";
+import { useFrame, useGraph } from "@react-three/fiber";
+import { useGLTF, useAnimations, Text } from "@react-three/drei";
+import { userAtom } from "./SocketManager";
 
 const MOVE_SPEED = 0.032;
 
@@ -22,6 +22,7 @@ export function Adventurer({
   const position = useMemo(() => props.position, []);
 
   const avatarRef = useRef();
+  const textRef = useRef();
   const { scene, materials, animations } = useGLTF("/models/Adventurer.glb");
 
   // Skinned meshes cannot be re-used in threejs without cloning them
@@ -54,16 +55,30 @@ export function Adventurer({
       setAnimation("CharacterArmature|Idle");
     }
 
-    if (id === user) {
+    if (id === user.id) {
       state.camera.position.x = avatarRef.current.position.x + 8;
       state.camera.position.y = avatarRef.current.position.y + 8;
       state.camera.position.z = avatarRef.current.position.z + 8;
       state.camera.lookAt(avatarRef.current.position);
     }
+
+    if (textRef.current) {
+      textRef.current.lookAt(state.camera.position);
+    }
   });
 
   return (
-    <group ref={avatarRef} {...props} position={position} dispose={null}>
+    <group {...props} ref={avatarRef} position={position} dispose={null}>
+      <Text
+        ref={textRef}
+        position-y={2.2}
+        fontSize={0.2}
+        color="black"
+        anchorX="center"
+        anchorY="middle"
+      >
+        {props.name}
+      </Text>
       <group name="Root_Scene">
         <group name="RootNode">
           <group

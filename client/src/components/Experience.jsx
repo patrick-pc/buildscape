@@ -1,6 +1,6 @@
 import { Adventurer } from "./Adventurer";
 import { Environment, OrbitControls, useCursor, Grid } from "@react-three/drei";
-import { charactersAtom } from "./SocketManager";
+import { playersAtom } from "./SocketManager";
 import { socket } from "./SocketManager";
 import { useAtom } from "jotai";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import * as THREE from "three";
 import { Torii } from "./Torii";
 
 export const Experience = () => {
-  const [characters] = useAtom(charactersAtom);
+  const [players] = useAtom(playersAtom);
   const [onFloor, setOnFloor] = useState(false);
   useCursor(onFloor);
 
@@ -35,10 +35,11 @@ export const Experience = () => {
         position={[0, 0.01, 0]}
       />
 
-      {characters.map((character) => (
+      {players.map((character) => (
         <Adventurer
           key={character.id}
           id={character.id}
+          name={character.name}
           position={
             new THREE.Vector3(
               character.position[0],
