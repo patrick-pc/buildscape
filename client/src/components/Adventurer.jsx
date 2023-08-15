@@ -13,7 +13,7 @@ import { userAtom } from "./SocketManager";
 const MOVE_SPEED = 0.032;
 
 export function Adventurer({
-  hairColor = "black",
+  // hairColor = "black",
   topColor = "black",
   bottomColor = "black",
   id,
@@ -40,6 +40,15 @@ export function Adventurer({
   }, [animation]);
 
   const [user] = useAtom(userAtom);
+
+  const guildColors = {
+    erevald: "green",
+    alterok: "blue",
+    gaudmire: "yellow",
+    spectreseek: "red",
+  };
+
+  const hairColor = guildColors[props.guild] || "black";
 
   useFrame((state) => {
     if (avatarRef.current.position.distanceTo(props.position) > 0.1) {

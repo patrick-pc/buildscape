@@ -35,21 +35,23 @@ export const Experience = () => {
         position={[0, 0.01, 0]}
       />
 
-      {players.map((character) => (
+      {players.map((player) => (
         <Adventurer
-          key={character.id}
-          id={character.id}
-          name={character.name}
+          key={player.id}
+          id={player.id}
+          name={player.name}
+          guild={player.guild}
+          class={player.class}
           position={
             new THREE.Vector3(
-              character.position[0],
-              character.position[1],
-              character.position[2]
+              player.position[0],
+              player.position[1],
+              player.position[2]
             )
           }
-          hairColor={character.hairColor}
-          topColor={character.topColor}
-          bottomColor={character.bottomColor}
+          hairColor={player.hairColor}
+          topColor={player.topColor}
+          bottomColor={player.bottomColor}
         />
       ))}
 
