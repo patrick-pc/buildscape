@@ -2,7 +2,9 @@ import { atom, useAtom } from "jotai";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
 
-export const socket = io("http://localhost:3001");
+export const socket = io(
+  import.meta.env.VITE_API_KEY || "http://localhost:3001"
+);
 export const charactersAtom = atom([]);
 export const userAtom = atom(null);
 
