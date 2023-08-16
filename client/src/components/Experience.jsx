@@ -1,11 +1,11 @@
-import { Adventurer } from "./Adventurer";
+import React, { useState } from "react";
+import { Avatar } from "./Avatar";
 import { Environment, OrbitControls, useCursor, Grid } from "@react-three/drei";
 import { playersAtom } from "./SocketManager";
 import { socket } from "./SocketManager";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import * as THREE from "three";
 import { Torii } from "./Torii";
+import { useAtom } from "jotai";
+import * as THREE from "three";
 
 export const Experience = () => {
   const [players] = useAtom(playersAtom);
@@ -35,25 +35,27 @@ export const Experience = () => {
         position={[0, 0.01, 0]}
       />
 
-      {players.map((player) => (
-        <Adventurer
-          key={player.id}
-          id={player.id}
-          name={player.name}
-          guild={player.guild}
-          class={player.class}
-          position={
-            new THREE.Vector3(
-              player.position[0],
-              player.position[1],
-              player.position[2]
-            )
-          }
-          hairColor={player.hairColor}
-          topColor={player.topColor}
-          bottomColor={player.bottomColor}
-        />
-      ))}
+      {players.map((player) => {
+        return (
+          <Avatar
+            key={player.id}
+            id={player.id}
+            name={player.name}
+            guild={player.guild}
+            avatarType={player.class}
+            hairColor={player.hairColor}
+            topColor={player.topColor}
+            bottomColor={player.bottomColor}
+            position={
+              new THREE.Vector3(
+                player.position[0],
+                player.position[1],
+                player.position[2]
+              )
+            }
+          />
+        );
+      })}
 
       <Torii
         scale={[15, 15, 15]}

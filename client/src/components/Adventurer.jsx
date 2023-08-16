@@ -23,7 +23,9 @@ export function Adventurer({
 
   const avatarRef = useRef();
   const textRef = useRef();
-  const { scene, materials, animations } = useGLTF("/models/Adventurer.glb");
+  const { scene, materials, animations } = useGLTF(
+    "/models/MaleAdventurer.glb"
+  );
 
   // Skinned meshes cannot be re-used in threejs without cloning them
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -77,7 +79,7 @@ export function Adventurer({
   });
 
   return (
-    <group {...props} ref={avatarRef} position={position} dispose={null}>
+    <group ref={avatarRef} {...props} position={position} dispose={null}>
       <Text
         ref={textRef}
         position-y={2.2}
@@ -230,4 +232,4 @@ export function Adventurer({
   );
 }
 
-useGLTF.preload("/models/Adventurer.glb");
+useGLTF.preload("/models/MaleAdventurer.glb");
