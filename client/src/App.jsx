@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { socket, SocketManager } from "./components/SocketManager";
 
 function App() {
@@ -12,6 +12,39 @@ function App() {
   });
   const [isGameStarted, setIsGameStarted] = useState(false);
   const playerComplete = player.name && player.guild && player.class;
+
+  const [chatMessage, setChatMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+
+  function handleSendMessage() {
+    if (chatMessage.trim()) {
+      socket.emit("sendChatMessage", chatMessage);
+      setChatMessage("");
+    }
+  }
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
+  useEffect(() => {
+    socket.on("receiveChatMessage", (message) => {
+      setChatMessages([...chatMessages, message]);
+    });
+
+    return () => {
+      socket.off("receiveChatMessage"); // This will ensure that the listener is removed when the component is unmounted or if the effect re-runs.
+    };
+  }, [chatMessages]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
 
   const joinGame = () => {
     if (!playerComplete) {
@@ -37,6 +70,37 @@ function App() {
               </Physics>
             </Suspense>
           </Canvas>
+
+          {/* Chat UI */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "24px",
+              left: "24px",
+              width: "400px",
+              background: "rgba(0,0,0,0.6)",
+            }}
+          >
+            <div
+              ref={messagesEndRef}
+              className="p-2"
+              style={{ overflowY: "auto", maxHeight: "200px" }}
+            >
+              {chatMessages.map((message, index) => (
+                <div key={index}>
+                  <strong className="text-gray-100">{message.sender}:</strong>{" "}
+                  {message.message}
+                </div>
+              ))}
+            </div>
+            <input
+              className="w-full px-2 py-1 focus:outline-none"
+              value={chatMessage}
+              onChange={(e) => setChatMessage(e.target.value)}
+              placeholder="Type your message..."
+              onKeyUp={handleKeyPress}
+            />
+          </div>
         </>
       ) : (
         <div className="w-full flex flex-col items-center justify-center gap-4 mt-80">

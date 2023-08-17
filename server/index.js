@@ -60,6 +60,12 @@ io.on("connection", (socket) => {
       io.emit("updatePlayer", player);
     }
   });
+  socket.on("sendChatMessage", (message) => {
+    const player = players[socket.id];
+    if (player) {
+      io.emit("receiveChatMessage", { sender: player.name, message }); // Ensure this line gets called only once per event.
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");

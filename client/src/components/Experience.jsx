@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Avatar } from "./Avatar";
 import { Environment, OrbitControls, useCursor, Grid } from "@react-three/drei";
-import { playersAtom } from "./SocketManager";
-import { socket } from "./SocketManager";
+import { socket, playersAtom } from "./SocketManager";
 import { Torii } from "./Torii";
 import { CyberpunkBar } from "./CyberpunkBar";
 import { useAtom } from "jotai";
