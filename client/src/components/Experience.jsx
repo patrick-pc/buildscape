@@ -4,8 +4,10 @@ import { Environment, OrbitControls, useCursor, Grid } from "@react-three/drei";
 import { playersAtom } from "./SocketManager";
 import { socket } from "./SocketManager";
 import { Torii } from "./Torii";
+import { CyberpunkBar } from "./CyberpunkBar";
 import { useAtom } from "jotai";
 import * as THREE from "three";
+import { SushiTruck } from "./SushiTruck";
 
 export const Experience = () => {
   const [players] = useAtom(playersAtom);
@@ -25,11 +27,11 @@ export const Experience = () => {
         onPointerEnter={() => setOnFloor(true)}
         onPointerLeave={() => setOnFloor(false)}
       >
-        <planeGeometry args={[100, 100]} />
+        <planeGeometry args={[50, 50]} />
         <meshStandardMaterial color="lightgray" />
       </mesh>
       <Grid
-        args={[100, 100]}
+        args={[50, 50]}
         sectionColor={"lightgray"}
         cellColor={"gray"}
         position={[0, 0.01, 0]}
@@ -72,6 +74,9 @@ export const Experience = () => {
         position={[8, 2.5, -20]}
         rotation-y={Math.PI}
       />
+
+      <SushiTruck position={[-15, 0, 0]} />
+      <CyberpunkBar position={[-15, 1, 20]} />
     </>
   );
 };
