@@ -110,6 +110,7 @@ function App() {
               value={player.name}
               onChange={(e) => setPlayer({ ...player, name: e.target.value })}
               className="w-full max-w-xs border px-2 py-1 focus:outline-none"
+              maxLength={16}
             />
           </div>
 
