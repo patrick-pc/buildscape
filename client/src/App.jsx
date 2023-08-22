@@ -17,6 +17,13 @@ function App() {
   const [chatMessages, setChatMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
+  useEffect(() => {
+    const savedPlayer = localStorage.getItem("player");
+    if (savedPlayer) {
+      setPlayer(JSON.parse(savedPlayer));
+    }
+  }, []);
+
   function handleSendMessage() {
     if (chatMessage.trim()) {
       socket.emit("sendChatMessage", chatMessage);
@@ -108,7 +115,11 @@ function App() {
             <p className="w-12">name:</p>
             <input
               value={player.name}
-              onChange={(e) => setPlayer({ ...player, name: e.target.value })}
+              onChange={(e) => {
+                const updatedPlayer = { ...player, name: e.target.value };
+                setPlayer(updatedPlayer);
+                localStorage.setItem("player", JSON.stringify(updatedPlayer));
+              }}
               className="w-full max-w-xs border px-2 py-1 focus:outline-none"
               maxLength={16}
             />
@@ -118,7 +129,11 @@ function App() {
             <p className="w-12">guild:</p>
             <select
               value={player.guild}
-              onChange={(e) => setPlayer({ ...player, guild: e.target.value })}
+              onChange={(e) => {
+                const updatedPlayer = { ...player, guild: e.target.value };
+                setPlayer(updatedPlayer);
+                localStorage.setItem("player", JSON.stringify(updatedPlayer));
+              }}
               className="w-full max-w-xs border px-2 py-1 focus:outline-none"
             >
               <option value="erevald">erevald</option>
@@ -132,7 +147,11 @@ function App() {
             <p className="w-12">class:</p>
             <select
               value={player.class}
-              onChange={(e) => setPlayer({ ...player, class: e.target.value })}
+              onChange={(e) => {
+                const updatedPlayer = { ...player, class: e.target.value };
+                setPlayer(updatedPlayer);
+                localStorage.setItem("player", JSON.stringify(updatedPlayer));
+              }}
               className="w-full max-w-xs border px-2 py-1 focus:outline-none"
             >
               <option value="founder">founder</option>
